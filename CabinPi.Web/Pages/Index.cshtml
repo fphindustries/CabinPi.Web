@@ -1,0 +1,115 @@
+﻿@page
+@model IndexModel
+@inject DataService DataService
+@{
+    ViewData["Title"] = "Home page";
+    var measurement = await DataService.GetMostRecentMeasurement();
+}
+
+@if (measurement != null)
+{
+    <div class="row g-3 mb-3">
+        <p><span class="material-icons">schedule</span> Last Updated: @measurement.Date</p> 
+    </div>
+    <div class="row g-3 mb-3">
+        <div class="col-md-6 col-xxl-3">
+            <partial name="_MeasurementCard" model='new _MeasurementCardModel { Caption = "Battery State", Value=measurement.BatteryStateDescription, Units="", Icon="charger" }' />
+        </div>
+        <div class="col-md-6 col-xxl-3">
+            <partial name="_MeasurementCard" model='new _MeasurementCardModel { Caption = "Panel Voltage", Value=measurement.DispavgVpv.ToString(), Units="V", Icon="solar_power", SparkId="PanelVoltage" }' />
+        </div>
+        <div class="col-md-6 col-xxl-3">
+            <partial name="_MeasurementCard" model='new _MeasurementCardModel { Caption = "Battery Voltage", Value=measurement.DispavgVbatt.ToString(), Units="V", Icon="battery_full", SparkId="BatteryVoltage" }' />
+        </div>
+        <div class="col-md-6 col-xxl-3">
+            <partial name="_MeasurementCard" model='new _MeasurementCardModel { Caption = "Amp Hours", Value=measurement.AmpHours.ToString(), Units="Ah", Icon="bolt", SparkId="AmpHours" }' />
+        </div>
+    </div>
+    <div class="row g-3 mb-3">
+        <div class="col-md-6 col-xxl-3">
+            <partial name="_MeasurementCard" model='new _MeasurementCardModel { Caption="Outside Temp" , Value=measurement.Ext_F?.ToString("F1") , Units="&deg;", Icon="thermostat", SparkId="OutsideTemp"}' />
+        </div>
+        <div class="col-md-6 col-xxl-3">
+            <partial name="_MeasurementCard" model='new _MeasurementCardModel { Caption="Inside Temp" , Value=measurement.Int_F?.ToString("F1") , Units="&deg;", Icon="device_thermostat", SparkId="InsideTemp"}' />
+        </div>
+        <div class="col-md-6 col-xxl-3">
+            <partial name="_MeasurementCard" model='new _MeasurementCardModel { Caption="Inside Humidity" , Value=measurement.Humidity?.ToString("F0") , Units="%", Icon="humidity_indoor", SparkId="InsideHumidity"}' />
+        </div>
+        <div class="col-md-6 col-xxl-3">
+            <partial name="_MeasurementCard" model='new _MeasurementCardModel { Caption="Outside Humidity" , Value=measurement.ExternalHumidity.ToString() , Units="%", Icon="humidity_mid", SparkId="OutsideHumidity"}' />
+        </div>
+    </div>
+    <div class="row g-3 mb-3">
+        <div class="col-md-6 col-xxl-3">
+            <partial name="_MeasurementCard" model='new _MeasurementCardModel { Caption="Wind Speed" , Value=measurement.WindAverage?.ToString("F2") , Units="mph", Icon="airwave", SparkId="WindSpeed"}' />
+        </div>
+        <div class="col-md-6 col-xxl-3">
+            <partial name="_MeasurementCard" model='new _MeasurementCardModel { Caption="Wind Direction" , Value=measurement.WindDirection.ToString() , Units="&deg;", Icon="explore", SparkId="WindDirection"}' />
+        </div>
+        <div class="col-md-6 col-xxl-3">
+            <partial name="_MeasurementCard" model='new _MeasurementCardModel { Caption="Wind Gusts" , Value=measurement.WindGust?.ToString("F2") , Units="mph", Icon="air", SparkId="WindGust"}' />
+        </div>
+        <div class="col-md-6 col-xxl-3">
+            <partial name="_MeasurementCard" model='new _MeasurementCardModel { Caption="Pressure" , Value=measurement.inHg?.ToString("F2") , Units="inHg", Icon="compress", SparkId="Pressure"}' />
+        </div>
+    </div>
+    <div class="row g-3 mb-3">
+        <div class="col-md-6 col-xxl-3">
+            <partial name="_MeasurementCard" model='new _MeasurementCardModel { Caption="Rain" , Value=measurement.RainRate.ToString() , Units="in", Icon="water_drop", SparkId="RainRate"}' />
+        </div>
+        <div class="col-md-6 col-xxl-3">
+            <partial name="_MeasurementCard" model='new _MeasurementCardModel { Caption="Daily Accumulation" , Value=measurement.DailyAccumulation?.ToString("F2") , Units="in", Icon="measuring_tape", SparkId="DailyAccumulation"}' />
+        </div>
+        <div class="col-md-6 col-xxl-3">
+            <partial name="_MeasurementCard" model='new _MeasurementCardModel { Caption="Lightning Strikes" , Value=measurement.StrikeCount.ToString() , Units="", Icon="thunderstorm", SparkId="StrikeCount"}' />
+        </div>
+        <div class="col-md-6 col-xxl-3">
+            <partial name="_MeasurementCard" model='new _MeasurementCardModel { Caption="Avg Strike Distance" , Value=measurement.AverageStrikeDistance.ToString() , Units="miles", Icon="distance", SparkId="StrikeDistance"}' />
+        </div>
+    </div>
+    <div class="row g-3 mb-3">
+        <div class="col-md-6 col-xxl-3">
+            <partial name="_MeasurementCard" model='new _MeasurementCardModel { Caption="Inverter Status" , Value=measurement.InverterModeStatus , Units="", Icon="power_settings_new"}' />
+        </div>
+        <div class="col-md-6 col-xxl-3">
+            <partial name="_MeasurementCard" model='new _MeasurementCardModel { Caption="Inverter Volts" , Value=measurement.InverterVACOut.ToString() , Units="V", Icon="electric_meter"}' />
+        </div>
+        <div class="col-md-6 col-xxl-3">
+            <partial name="_MeasurementCard" model='new _MeasurementCardModel { Caption="Inverter Amps" , Value=measurement.InverterAACOut.ToString() , Units="A", Icon="electrical_services"}' />
+        </div>
+        <div class="col-md-6 col-xxl-3">
+            <partial name="_MeasurementCard" model='new _MeasurementCardModel { Caption="Inverter Fault" , Value=measurement.InverterFault.ToString() , Units="", Icon="report"}' />
+        </div>
+    </div>
+    <div class="row g-3 mb-3">
+        <div class="col-md-6 col-xxl-6">
+            <partial name="_LatestPictureCard" model='new _LatestPictureCardModel()' />
+        </div>
+    </div>
+}
+
+@section Scripts {
+    <script>
+        $(async function () {
+            var history = await fetch("/api/history");
+            var data = await history.json();
+            console.log(data);
+            sparkline.sparkline(document.querySelector("#PanelVoltage"), data.panelVoltage);
+            sparkline.sparkline(document.querySelector("#BatteryVoltage"), data.batteryVoltage);
+            sparkline.sparkline(document.querySelector("#AmpHours"), data.ampHours);
+            sparkline.sparkline(document.querySelector("#OutsideTemp"), data.outsideTemp);
+            sparkline.sparkline(document.querySelector("#InsideTemp"), data.insideTemp);
+            sparkline.sparkline(document.querySelector("#InsideHumidity"), data.insideHumidity);
+            sparkline.sparkline(document.querySelector("#OutsideHumidity"), data.outsideHumidity);
+            sparkline.sparkline(document.querySelector("#WindSpeed"), data.windSpeed);
+            sparkline.sparkline(document.querySelector("#WindDirection"), data.windDirection);
+            sparkline.sparkline(document.querySelector("#WindGust"), data.windGust);
+            sparkline.sparkline(document.querySelector("#Pressure"), data.pressure);
+            sparkline.sparkline(document.querySelector("#RainRate"), data.rainRate);
+            sparkline.sparkline(document.querySelector("#DailyAccumulation"), data.dailyAccumulation);
+            sparkline.sparkline(document.querySelector("#StrikeCount"), data.strikeCount);
+            sparkline.sparkline(document.querySelector("#StrikeDistance"), data.strikeDistance);
+
+        });
+    </script>
+}
